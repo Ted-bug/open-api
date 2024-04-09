@@ -9,23 +9,27 @@ import (
 )
 
 type Config struct {
-	AppDebug bool `mapstructure:"app_debug"`
-	Mysql    struct {
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		User     string `mapstructure:"user"`
-		Password string `mapstructure:"password"`
-		DbName   string `mapstructure:"db_name"`
-		Charset  string `mapstructure:"charset"`
-		Prefix   string `mapstructure:"prefix"`
-	} `mapstructure:"mysql"`
-	Redis struct {
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		Password string `mapstructure:"password"`
-		Db       int    `mapstructure:"db"`
-		Prefix   string `mapstructure:"prefix"`
-	} `mapstructure:"redis"`
+	AppDebug bool  `mapstructure:"app_debug"`
+	Mysql    Mysql `mapstructure:"mysql"`
+	Redis    Redis `mapstructure:"redis"`
+}
+
+type Mysql struct {
+	Host     string `mapstructure:"host"`
+	Port     string `mapstructure:"port"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+	DbName   string `mapstructure:"db_name"`
+	Charset  string `mapstructure:"charset"`
+	Prefix   string `mapstructure:"prefix"`
+}
+
+type Redis struct {
+	Host     string `mapstructure:"host"`
+	Port     string `mapstructure:"port"`
+	Password string `mapstructure:"password"`
+	Db       int    `mapstructure:"db"`
+	Prefix   string `mapstructure:"prefix"`
 }
 
 var AppConfig = &Config{}

@@ -3,13 +3,13 @@ mysql:
   host: 127.0.0.1
   port: 3306
   user: root
-  password: 123456
+  password: root
   dbname: open-api
   charset: utf8mb4
   prefix: open_
 redis:
   host: 127.0.0.1
   port: 6379
-  password:
+  password: 123456
   db: 0
   prefix: open_

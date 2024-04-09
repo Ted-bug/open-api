@@ -45,14 +45,13 @@ func InitConfig() error {
 	if err := configViper.Unmarshal(AppConfig); err != nil {
 		return err
 	}
+	configViper.WatchConfig()
 	configViper.OnConfigChange(func(in fsnotify.Event) {
-		configViper.ReadInConfig()
 		if err := configViper.Unmarshal(AppConfig); err != nil {
 			fmt.Println("reload config failed, err:", err)
 		} else {
 			fmt.Println("reload config success")
 		}
 	})
-	configViper.WatchConfig()
 	return nil
 }

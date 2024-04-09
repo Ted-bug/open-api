@@ -7,6 +7,7 @@ import (
 )
 
 func Run() {
-	err := config.InitConfig()
-	fmt.Println(config.AppConfig, err)
+	if err := config.InitConfig(); err != nil {
+		fmt.Println("Load Config Error!")
+	}
 }

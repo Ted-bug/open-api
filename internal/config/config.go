@@ -9,9 +9,10 @@ import (
 )
 
 type Config struct {
-	AppDebug bool  `mapstructure:"app_debug"`
-	Mysql    Mysql `mapstructure:"mysql"`
-	Redis    Redis `mapstructure:"redis"`
+	AppDebug bool   `mapstructure:"app_debug"`
+	Mysql    Mysql  `mapstructure:"mysql"`
+	Redis    Redis  `mapstructure:"redis"`
+	Logger   Logger `mapstructure:"logger"`
 }
 
 type Mysql struct {
@@ -30,6 +31,15 @@ type Redis struct {
 	Password string `mapstructure:"password"`
 	Db       int    `mapstructure:"db"`
 	Prefix   string `mapstructure:"prefix"`
+}
+
+type Logger struct {
+	Type       string `mapstructure:"type"`
+	Path       string `mapstructure:"path"`
+	Filename   string `mapstructure:"filename"`
+	MaxSize    int    `mapstructure:"max_size"`
+	MaxBackups int    `mapstructure:"max_backups"`
+	MaxAge     int    `mapstructure:"max_age"`
 }
 
 var AppConfig = &Config{}
@@ -57,5 +67,6 @@ func InitConfig() error {
 			fmt.Println("reload config success")
 		}
 	})
+	fmt.Println("config init success")
 	return nil
 }

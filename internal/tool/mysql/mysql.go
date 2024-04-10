@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"fmt"
+
 	"github.com/Ted-bug/open-api/internal/config"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -18,6 +20,7 @@ func InitMysql() error {
 	if err != nil {
 		return err
 	}
+	fmt.Println("mysql init success")
 	return nil
 }
 

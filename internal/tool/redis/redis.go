@@ -17,6 +17,7 @@ func InitRedis() error {
 		DB:       option.Db,
 	})
 	_, err := RedisClient.Ping().Result()
+	fmt.Println("RedisClient init success")
 	return err
 }
 

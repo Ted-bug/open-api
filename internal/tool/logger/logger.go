@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Ted-bug/open-api/internal/config"
@@ -13,16 +14,17 @@ import (
 var Logger *zap.Logger
 
 func InitLogger() {
-	logConf := config.AppConfig.Logger
-	switch logConf.Type {
+	option := config.AppConfig.Logger
+	switch option.Type {
 	case "file":
 		// Logger = CreateSyncLogger()
-		Logger = CreateAsyncLogger(logConf) // 配置了日志切割写入器的Logger
+		Logger = CreateAsyncLogger(option) // 配置了日志切割写入器的Logger
 	case "command":
 		fallthrough
 	default:
 		Logger, _ = zap.NewProduction(zap.AddCaller()) // 打印到命令行stdout的Logger
 	}
+	fmt.Println("Logger init success")
 }
 
 // CreateSyncLogger 创建一个同步写日志的Logger实例。

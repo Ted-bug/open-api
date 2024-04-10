@@ -20,7 +20,7 @@ func InitMysql() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("mysql init success")
+	fmt.Println("Mysql init success")
 	return nil
 }
 

@@ -9,10 +9,10 @@ import (
 )
 
 type Config struct {
-	AppDebug bool   `mapstructure:"app_debug"`
-	Mysql    Mysql  `mapstructure:"mysql"`
-	Redis    Redis  `mapstructure:"redis"`
-	Logger   Logger `mapstructure:"logger"`
+	Mode   string `mapstructure:"mode"`
+	Mysql  Mysql  `mapstructure:"mysql"`
+	Redis  Redis  `mapstructure:"redis"`
+	Logger Logger `mapstructure:"logger"`
 }
 
 type Mysql struct {
@@ -67,6 +67,6 @@ func InitConfig() error {
 			fmt.Println("reload config success")
 		}
 	})
-	fmt.Println("config init success")
+	fmt.Println("Config init success")
 	return nil
 }

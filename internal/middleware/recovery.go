@@ -1,7 +1,11 @@
 package middleware
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/Ted-bug/open-api/internal/tool/logger"
+	ginzap "github.com/gin-contrib/zap"
+	"github.com/gin-gonic/gin"
+)
 
-func RecoveryMiddleware() gin.HandlerFunc {
-	return nil
+func RecoveryMiddlerware() gin.HandlerFunc {
+	return ginzap.RecoveryWithZap(logger.Logger, true)
 }

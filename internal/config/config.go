@@ -10,6 +10,8 @@ import (
 
 type Config struct {
 	Mode   string `mapstructure:"mode"`
+	Host   string `mapstructure:"host"`
+	Port   string `mapstructure:"port"`
 	Mysql  Mysql  `mapstructure:"mysql"`
 	Redis  Redis  `mapstructure:"redis"`
 	Logger Logger `mapstructure:"logger"`

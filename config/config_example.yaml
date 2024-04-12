@@ -16,7 +16,7 @@ redis:
   db: 0
   prefix: open_
 logger:
-  type: command
+  type: file
   path: logs/
   file: open-api.log
   max_size: 10

@@ -16,9 +16,9 @@ redis:
   db: 0
   prefix: open_
 logger:
-  type: file
-  path: logs/
-  file: open-api.log
+  type: file # 记录方式
+  path: /logs/ # 项目相对路径，日志文件路径
+  filename: open-api.log
   max_size: 10
   max_age: 30
   max_backups: 7

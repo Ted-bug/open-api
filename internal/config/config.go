@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Ted-bug/open-api/internal/constants"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -52,7 +53,7 @@ func InitConfig() error {
 	if home, err := os.UserHomeDir(); err == nil {
 		configViper.AddConfigPath(home)
 	}
-	configViper.AddConfigPath("./config")
+	configViper.AddConfigPath(constants.CONFPATH)
 	configViper.SetConfigName("config")
 	configViper.SetConfigType("yaml")
 	if err := configViper.ReadInConfig(); err != nil {

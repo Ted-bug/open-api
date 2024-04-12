@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/Ted-bug/open-api/internal/config"
+	"github.com/Ted-bug/open-api/internal/constants"
 	"github.com/Ted-bug/open-api/internal/middleware"
 	"github.com/Ted-bug/open-api/internal/router"
 	"github.com/Ted-bug/open-api/internal/tool/logger"
@@ -21,6 +22,7 @@ import (
 
 func Run() {
 	// 1.启动服务
+	constants.InitPath()
 	if err := config.InitConfig(); err != nil {
 		fmt.Printf("Load Config Error: %s\n", err)
 		return

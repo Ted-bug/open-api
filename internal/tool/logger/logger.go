@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Ted-bug/open-api/internal/config"
+	"github.com/Ted-bug/open-api/internal/constants"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -87,10 +88,10 @@ func CreateAsyncLogger(option config.Logger) *zap.Logger {
 func GetSyncWriter(option config.Logger) zapcore.WriteSyncer {
 	// 使用 lumberjack.Logger 实现 zapcore.WriteSyncer 接口，配置日志文件路径、最大尺寸、备份数量和最多保存天数等参数
 	w := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   option.Path + option.Filename, // 日志文件完整路径
-		MaxSize:    option.MaxSize,                // 每个日志文件的最大尺寸（单位：MB）
-		MaxBackups: option.MaxBackups,             // 保留的日志文件备份数量
-		MaxAge:     option.MaxAge,                 // 日志文件最多保存的天数
+		Filename:   constants.PROJECTPATH + option.Path + option.Filename, // 日志文件完整路径
+		MaxSize:    option.MaxSize,                                        // 每个日志文件的最大尺寸（单位：MB）
+		MaxBackups: option.MaxBackups,                                     // 保留的日志文件备份数量
+		MaxAge:     option.MaxAge,                                         // 日志文件最多保存的天数
 	})
 	return w
 }

@@ -6,6 +6,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	Version string
+	Branch  string
+	Date    string
+)
+
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "App Version.",
@@ -14,5 +20,5 @@ var versionCmd = &cobra.Command{
 }
 
 func versionCmdExcutefunc(cmd *cobra.Command, args []string) {
-	fmt.Println("Version is 0.1.0.")
+	fmt.Printf("Version is: %s.\nBranch is: %s.\nDate is: %s.\n", Version, Branch, Date)
 }

@@ -8,7 +8,7 @@ all: gotool build
 
 # 在没有使用CGO的情况下，CGO_ENABLED=0可以让其静态编译；否则，需要设置为1，CGO的包会变成动态链接库，即生成的二进制文件对动态链接库有依赖
 build:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ${BINARY}
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-X 'github.com/Ted-bug/open-api/cmd.Version=$(git describe --tags --always --dirty)' -X 'github.com/Ted-bug/open-api/cmd.Branch=$(git rev-parse --abbrev-ref HEAD)' -X 'github.com/Ted-bug/open-api/cmd.Date=$(date)'" -o ${BINARY}
 
 run:
 	@go run ./

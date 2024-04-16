@@ -6,6 +6,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	Version string
+	Branch  string
+	Date    string
+)
+
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "App Version.",

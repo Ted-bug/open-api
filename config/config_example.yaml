@@ -6,7 +6,7 @@ mysql:
   port: 3306
   user: root
   password: root
-  dbname: open-api
+  db_name: open-api
   charset: utf8mb4
   prefix: open_
 redis:

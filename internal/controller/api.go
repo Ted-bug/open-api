@@ -50,5 +50,4 @@ func ShortUrl(c *gin.Context) {
 	c.JSON(http.StatusOK, response.SucceedWithData(map[string]any{
 		"short_url": shortUrl,
 	}))
-	return
 }

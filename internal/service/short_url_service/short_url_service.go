@@ -8,6 +8,12 @@ import (
 
 	"github.com/Ted-bug/open-api/internal/model"
 	"github.com/Ted-bug/open-api/internal/tool/mysql"
+	"github.com/Ted-bug/open-api/internal/tool/redis"
+)
+
+const (
+	// 短链接长度
+	SHORT_KEY = "short-list:"
 )
 
 // 判断短链接是否存在
@@ -19,8 +25,15 @@ func IsUrlExist(Url string) (string, bool) {
 		return "", false
 	}
 	urlMd5 := hex.EncodeToString(hasher.Sum(nil))
+	key := SHORT_KEY + urlMd5
+	if has, err := redis.RedisClient.Exists(key).Result(); err == nil && has != 0 {
+		if v, err := redis.RedisClient.Get(key).Result(); err == nil {
+			return v, true
+		}
+	}
 	var short model.ShortUrl
 	if err := mysql.DB.Where("hash=?", urlMd5).Find(&short).Error; err == nil {
+		redis.RedisClient.Set(key, short.Short, 10*time.Second).Result()
 		return short.Short, true
 	}
 	return "", false
@@ -41,6 +54,8 @@ func CreateShortUrl(Url string) (string, error) {
 	if err := mysql.DB.Create(&short).Error; err != nil {
 		return "", err
 	}
+	key := SHORT_KEY + short.Hash
+	redis.RedisClient.Set(key, short.Short, 10*time.Second).Result()
 	return short.Short, nil
 }
 

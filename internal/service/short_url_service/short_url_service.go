@@ -62,8 +62,7 @@ func CreateShortUrl(Url string) (string, error) {
 	life := 3*time.Hour + time.Duration(rand.Int63n(10))*time.Minute
 	redis.RedisClient.Set(key, short.Short, life).Result()
 	// 将短链接移除忽略列表
-	key = IGNORE_KEY + short.Hash
-	redis.RedisClient.Set(key, short.Short, 0).Result()
+	redis.RedisClient.Set(IGNORE_KEY+short.Short, short.Short, 0).Result()
 	return short.Short, nil
 }
 
@@ -81,7 +80,9 @@ func generateNumber() string {
 	return string(short)
 }
 
+// 解析短链
 func ParseUrl(s string) (string, bool) {
+	// 判断是否在忽略列表
 	if has, err := redis.RedisClient.Exists(IGNORE_KEY + s).Result(); err == nil && has != 0 {
 		return "", false
 	}
@@ -89,6 +90,7 @@ func ParseUrl(s string) (string, bool) {
 	if err := mysql.DB.Where("short=?", s).Find(&short); err == nil {
 		return short.Url, true
 	}
+	// 添加忽略列表
 	redis.RedisClient.Set(IGNORE_KEY+s, 1, 10*time.Hour).Result()
 	return "", false
 }

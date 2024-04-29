@@ -13,7 +13,8 @@ import (
 
 const (
 	// 短链接长度
-	SHORT_KEY = "short-list:"
+	SHORT_KEY  = "short-list:"
+	IGNORE_KEY = "ignore-list:"
 )
 
 // 判断短链接是否存在
@@ -25,6 +26,7 @@ func IsUrlExist(Url string) (string, bool) {
 		return "", false
 	}
 	urlMd5 := hex.EncodeToString(hasher.Sum(nil))
+	// 优先缓存读取
 	key := SHORT_KEY + urlMd5
 	if has, err := redis.RedisClient.Exists(key).Result(); err == nil && has != 0 {
 		if v, err := redis.RedisClient.Get(key).Result(); err == nil {
@@ -33,7 +35,8 @@ func IsUrlExist(Url string) (string, bool) {
 	}
 	var short model.ShortUrl
 	if err := mysql.DB.Where("hash=?", urlMd5).Find(&short).Error; err == nil {
-		redis.RedisClient.Set(key, short.Short, 10*time.Second).Result()
+		life := 3*time.Hour + time.Duration(rand.Int63n(10))*time.Minute
+		redis.RedisClient.Set(key, short.Short, life).Result()
 		return short.Short, true
 	}
 	return "", false
@@ -54,8 +57,13 @@ func CreateShortUrl(Url string) (string, error) {
 	if err := mysql.DB.Create(&short).Error; err != nil {
 		return "", err
 	}
+	// 加入缓存
 	key := SHORT_KEY + short.Hash
-	redis.RedisClient.Set(key, short.Short, 10*time.Second).Result()
+	life := 3*time.Hour + time.Duration(rand.Int63n(10))*time.Minute
+	redis.RedisClient.Set(key, short.Short, life).Result()
+	// 将短链接移除忽略列表
+	key = IGNORE_KEY + short.Hash
+	redis.RedisClient.Set(key, short.Short, 0).Result()
 	return short.Short, nil
 }
 
@@ -71,4 +79,16 @@ func generateNumber() string {
 		short = append([]byte{base62Chars[remainder]}, short...)
 	}
 	return string(short)
+}
+
+func ParseUrl(s string) (string, bool) {
+	if has, err := redis.RedisClient.Exists(IGNORE_KEY + s).Result(); err == nil && has != 0 {
+		return "", false
+	}
+	var short model.ShortUrl
+	if err := mysql.DB.Where("short=?", s).Find(&short); err == nil {
+		return short.Url, true
+	}
+	redis.RedisClient.Set(IGNORE_KEY+s, 1, 10*time.Hour).Result()
+	return "", false
 }

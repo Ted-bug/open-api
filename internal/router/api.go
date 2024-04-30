@@ -14,6 +14,6 @@ func initApiRouter(group *gin.RouterGroup) {
 			})
 		})
 		api.POST("/short-url", controller.ShortUrl)
-		api.GET("/jump", controller.ParseUrl)
+		api.GET("/jump", controller.ParseShort)
 	}
 }

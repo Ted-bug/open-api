@@ -7,14 +7,15 @@ import (
 	"time"
 
 	"github.com/Ted-bug/open-api/internal/model"
+	"github.com/Ted-bug/open-api/internal/tool/common"
 	"github.com/Ted-bug/open-api/internal/tool/mysql"
 	"github.com/Ted-bug/open-api/internal/tool/redis"
 )
 
 const (
-	// 短链接长度
-	SHORT_KEY  = "short-list:"
-	IGNORE_KEY = "ignore-list:"
+	SHORT_KEY  = "short-list:"  // 短链缓存
+	IGNORE_KEY = "ignore-list:" // 短转长，忽略不存在的短链
+	LONG_KEY   = "long-list:"   // 长链缓存
 )
 
 // 判断短链接是否存在
@@ -35,8 +36,7 @@ func IsUrlExist(Url string) (string, bool) {
 	}
 	var short model.ShortUrl
 	if err := mysql.DB.Where("hash=?", urlMd5).Find(&short).Error; err == nil {
-		life := 3*time.Hour + time.Duration(rand.Int63n(10))*time.Minute
-		redis.RedisClient.Set(key, short.Short, life).Result()
+		redis.RedisClient.Set(key, short.Short, common.RandMinute(5)).Result()
 		return short.Short, true
 	}
 	return "", false
@@ -59,17 +59,15 @@ func CreateShortUrl(Url string) (string, error) {
 	}
 	// 加入缓存
 	key := SHORT_KEY + short.Hash
-	life := 3*time.Hour + time.Duration(rand.Int63n(10))*time.Minute
-	redis.RedisClient.Set(key, short.Short, life).Result()
+	redis.RedisClient.Set(key, short.Short, common.RandMinute(5)).Result()
 	// 将短链接移除忽略列表
-	redis.RedisClient.Set(IGNORE_KEY+short.Short, short.Short, 0).Result()
+	redis.RedisClient.Del(IGNORE_KEY + short.Short).Result()
 	return short.Short, nil
 }
 
 // 生成短链接号
 func generateNumber() string {
 	base62Chars := []byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	rand.Seed(time.Now().UnixNano())
 	number := rand.Int63()
 
 	short, remainder := []byte{}, int64(0)
@@ -86,11 +84,15 @@ func ParseUrl(s string) (string, bool) {
 	if has, err := redis.RedisClient.Exists(IGNORE_KEY + s).Result(); err == nil && has != 0 {
 		return "", false
 	}
+	if v, err := redis.RedisClient.Get(LONG_KEY + s).Result(); err == nil {
+		return v, true
+	}
 	var short model.ShortUrl
-	if err := mysql.DB.Where("short=?", s).Find(&short); err == nil {
+	if err := mysql.DB.Where("short=?", s).Find(&short).Error; err == nil {
+		redis.RedisClient.Set(LONG_KEY+s, short.Url, common.RandMinute(15)).Result()
 		return short.Url, true
 	}
 	// 添加忽略列表
-	redis.RedisClient.Set(IGNORE_KEY+s, 1, 10*time.Hour).Result()
+	redis.RedisClient.Set(IGNORE_KEY+s, 1, common.RandHour(10)).Result()
 	return "", false
 }

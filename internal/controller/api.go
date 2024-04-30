@@ -53,15 +53,15 @@ func ShortUrl(c *gin.Context) {
 }
 
 // 解析短链
-func ParseUrl(c *gin.Context) {
+func ParseShort(c *gin.Context) {
 	short := c.Query("s")
 	if short == "" {
-		c.JSON(http.StatusNotFound, response.FailedWithMsg("url is not avaliable"))
+		c.JSON(http.StatusOK, response.FailedWithMsg("url is not avaliable"))
 		return
 	}
 	if url, ok := shorturlservice.ParseUrl(short); ok {
 		c.Redirect(http.StatusMovedPermanently, url)
 		return
 	}
-	c.JSON(http.StatusNotFound, response.FailedWithMsg("url is not avaliable"))
+	c.JSON(http.StatusOK, response.FailedWithMsg("url is not avaliable"))
 }

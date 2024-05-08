@@ -10,7 +10,7 @@ import (
 )
 
 // 获取短链
-func ShortUrl(c *gin.Context) {
+func ConvertLurl(c *gin.Context) {
 	param := struct {
 		Url       string `json:"url"`
 		Timestamp string `json:"timestamp"`
@@ -43,7 +43,7 @@ func ShortUrl(c *gin.Context) {
 		}))
 		return
 	}
-	if shortUrl, err = shorturlservice.CreateShortUrl(param.Url); err != nil {
+	if shortUrl, err = shorturlservice.ConvertLurl(param.Url); err != nil {
 		c.JSON(http.StatusOK, response.FailedWithMsg(err.Error()))
 		return
 	}
@@ -53,13 +53,13 @@ func ShortUrl(c *gin.Context) {
 }
 
 // 解析短链
-func ParseShort(c *gin.Context) {
+func RevertSurl(c *gin.Context) {
 	short := c.Query("s")
 	if short == "" {
 		c.JSON(http.StatusOK, response.FailedWithMsg("url is not avaliable"))
 		return
 	}
-	if url, ok := shorturlservice.ParseUrl(short); ok {
+	if url, ok := shorturlservice.RevertSurl(short); ok {
 		c.Redirect(http.StatusMovedPermanently, url)
 		return
 	}

@@ -13,7 +13,7 @@ func initApiRouter(group *gin.RouterGroup) {
 				"message": "hello world",
 			})
 		})
-		api.POST("/short-url", controller.ShortUrl)
-		api.GET("/jump", controller.ParseShort)
+		api.POST("/convert-lurl", controller.ConvertLurl)
+		api.GET("/surl", controller.RevertSurl)
 	}
 }

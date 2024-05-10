@@ -68,14 +68,31 @@ func ConvertLurl(Url string) (string, error) {
 // 生成短链接号
 func generateNumber() string {
 	base62Chars := []byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	number := rand.Int63()
-
+	number := UniqueNum()
 	short, remainder := []byte{}, int64(0)
 	for number > 0 {
-		number, remainder = number/64, number%64
+		number, remainder = number/62, number%62
 		short = append([]byte{base62Chars[remainder]}, short...)
 	}
 	return string(short)
+}
+
+// 产生唯一ID
+func UniqueNum() int64 {
+	var err error
+	shortNum := model.UniqueNum{Type: "short"}
+	// 数据库设置主键自增、唯一索引：触发replace删除后插入的操作，达到唯一ID的效果
+	tx := mysql.DB.Begin() // 事务，保证并发时，生成的ID不会重复
+	stmt := "replace into " + shortNum.TableName() + " (type) values (?)"
+	if err = tx.Exec(stmt, shortNum.Type).Error; err == nil {
+		if err = mysql.DB.Where("type=?", shortNum.Type).Last(&shortNum).Error; err == nil {
+			if err = tx.Commit().Error; err == nil {
+				return shortNum.Id
+			}
+		}
+	}
+	tx.Rollback()
+	return rand.Int63() // 兜底获取id
 }
 
 // 解析短链

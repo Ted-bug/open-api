@@ -5,6 +5,7 @@ import (
 
 	shorturlservice "github.com/Ted-bug/open-api/internal/service/short_url_service"
 	userservice "github.com/Ted-bug/open-api/internal/service/user_service"
+	"github.com/Ted-bug/open-api/internal/tool/common"
 	"github.com/Ted-bug/open-api/internal/tool/response"
 	"github.com/gin-gonic/gin"
 )
@@ -35,6 +36,10 @@ func ConvertLurl(c *gin.Context) {
 	}
 	if ok, err = userservice.CheckSignByAkSk(sk, param.Timestamp, param.Sign); !ok {
 		c.JSON(http.StatusOK, response.FailedWithMsg(err.Error()))
+		return
+	}
+	if common.IsValidURL(param.Url) || common.IsUrlActive(param.Url) {
+		c.JSON(http.StatusOK, response.FailedWithMsg("url is not avaliable"))
 		return
 	}
 	if shortUrl, ok = shorturlservice.IsUrlExist(param.Url); ok {

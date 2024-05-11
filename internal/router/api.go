@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/Ted-bug/open-api/internal/controller"
+	"github.com/Ted-bug/open-api/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,7 +14,7 @@ func initApiRouter(group *gin.RouterGroup) {
 				"message": "hello world",
 			})
 		})
-		api.POST("/convert-lurl", controller.ConvertLurl)
+		api.Use(middleware.AkSkCheckMiddleware()).POST("/convert-lurl", controller.ConvertLurl)
 		api.GET("/surl", controller.RevertSurl)
 	}
 }

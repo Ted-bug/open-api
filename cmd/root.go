@@ -14,7 +14,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(versionCmd, runCmd)
+	rootCmd.AddCommand(versionCmd, configCmd, runCmd, migrateCmd)
 }
 
 func rootCmdExcutefunc(cmd *cobra.Command, args []string) {

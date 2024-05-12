@@ -27,7 +27,7 @@ go build -o open-api
 ```
 2. 数据库初始化
 ```
-open-api migerate
+open-api migrate
 ```
 3. 运行
 ```

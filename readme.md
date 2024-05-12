@@ -1,4 +1,5 @@
 # 1 项目结构
+```txt
 |--cmd
 |--config
 |--internal
@@ -18,7 +19,7 @@
 |--main.go          # 入口文件
 |--Makefile         # 构建脚本：unix系统下的批处理脚本
 |--README.md        # 说明文档
-
+```
 # 2 运行
 1. 编译成可执行文件
 ```golang

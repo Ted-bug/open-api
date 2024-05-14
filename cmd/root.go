@@ -14,6 +14,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
+	InitConfigCmd()
 	rootCmd.AddCommand(versionCmd, configCmd, runCmd, migrateCmd)
 }
 

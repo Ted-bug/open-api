@@ -6,7 +6,6 @@ import (
 
 	"github.com/Ted-bug/open-api/internal/constants"
 	"github.com/fsnotify/fsnotify"
-	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 )
 
@@ -72,59 +71,5 @@ func InitConfig() error {
 		}
 	})
 	fmt.Println("Config init success")
-	return nil
-}
-
-// 生成配置文件
-func CreateConfig() error {
-	config := Config{
-		Mode: "debug",
-		Host: "0.0.0.0",
-		Port: "8080",
-		Mysql: Mysql{
-			Host:     "127.0.0.1",
-			Port:     "3306",
-			User:     "root",
-			Password: "root",
-			DbName:   "open_api",
-			Charset:  "utf8mb4",
-			Prefix:   "open_",
-		},
-		Redis: Redis{
-			Host:     "127.0.0.1",
-			Port:     "6379",
-			Password: "",
-			Db:       0,
-			Prefix:   "open_",
-		},
-		Logger: Logger{
-			Type:       "file",
-			Path:       "./logs/",
-			Filename:   "open_api.log",
-			MaxSize:    10,
-			MaxAge:     30,
-			MaxBackups: 7,
-		},
-	}
-	var cMap map[string]any
-	mapstructure.Decode(config, &cMap)
-
-	configViper := viper.New()
-	for k1, v1 := range cMap {
-		if _, ok := v1.(map[string]any); ok {
-			sub, _ := v1.(map[string]any)
-			for k2, v2 := range sub {
-				configViper.Set(k1+"."+k2, v2)
-			}
-		} else {
-			configViper.Set(k1, v1)
-		}
-	}
-	configViper.AddConfigPath("./config/")
-	configViper.SetConfigName("aaa")
-	configViper.SetConfigType("yaml")
-	if err := configViper.SafeWriteConfig(); err != nil {
-		return err
-	}
 	return nil
 }

@@ -1,4 +1,4 @@
-BINARY="main"
+BINARY="open-api"
 
 .PHONY: all
 # 发布操作：格式化、编译

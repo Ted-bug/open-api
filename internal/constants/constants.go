@@ -15,7 +15,7 @@ var (
 	CONFPATH    = "/config"        // 配置文件路径
 	STATIC      = "/public/static" // 静态文件路径
 	TEMPLATES   = "/templates/"    // 模板文件路径
-	LOGPATH     = "/logs/"         // 日志路径
+	LOGPATH     = "/logs/"         // 日志路径，未使用，以config为主
 )
 
 var (

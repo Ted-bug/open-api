@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"github.com/Ted-bug/open-api/internal/tool/logger"
+	"github.com/Ted-bug/open-api/internal/pkg/logger"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"

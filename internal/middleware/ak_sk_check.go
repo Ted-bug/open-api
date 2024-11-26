@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
+	"github.com/Ted-bug/open-api/internal/pkg/response"
 	userservice "github.com/Ted-bug/open-api/internal/service/user_service"
-	"github.com/Ted-bug/open-api/internal/tool/response"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )

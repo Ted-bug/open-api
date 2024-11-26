@@ -7,7 +7,7 @@ import (
 	"errors"
 
 	"github.com/Ted-bug/open-api/internal/model"
-	"github.com/Ted-bug/open-api/internal/tool/mysql"
+	"github.com/Ted-bug/open-api/internal/pkg/mysql"
 	"github.com/jinzhu/gorm"
 )
 

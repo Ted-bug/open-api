@@ -1,6 +1,8 @@
 package config
 
 import (
+	_ "embed"
+	"errors"
 	"fmt"
 	"os"
 
@@ -71,5 +73,23 @@ func InitConfig() error {
 		}
 	})
 	fmt.Println("config init success")
+	return nil
+}
+
+//go:embed config_example.yaml
+var configExample string
+
+// 创建配置文件示例
+func CreateConfigFile(filename string) error {
+	if filename == "" {
+		filename = "config"
+	}
+	path := "./config/" + filename + ".yaml"
+	if _, err := os.Stat(path); err == nil || !os.IsNotExist(err) {
+		return errors.New("the file is exist: " + path)
+	}
+	if err := os.WriteFile(path, []byte(configExample), 0644); err != nil {
+		return err
+	}
 	return nil
 }

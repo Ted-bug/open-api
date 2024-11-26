@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Ted-bug/open-api/internal/tool/response"
+	"github.com/Ted-bug/open-api/internal/pkg/response"
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"
 )

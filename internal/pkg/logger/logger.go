@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Ted-bug/open-api/internal/config"
+	"github.com/Ted-bug/open-api/config"
 	"github.com/Ted-bug/open-api/internal/constants"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -25,7 +25,7 @@ func InitLogger() {
 	default:
 		Logger, _ = zap.NewProduction(zap.AddCaller()) // 打印到命令行stdout的Logger
 	}
-	fmt.Println("Logger init success")
+	fmt.Println("logger init success")
 }
 
 // CreateSyncLogger 创建一个同步写日志的Logger实例。

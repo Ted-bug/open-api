@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/Ted-bug/open-api/internal/model"
-	"github.com/Ted-bug/open-api/internal/tool/common"
-	"github.com/Ted-bug/open-api/internal/tool/mysql"
-	"github.com/Ted-bug/open-api/internal/tool/redis"
+	"github.com/Ted-bug/open-api/internal/pkg/common"
+	"github.com/Ted-bug/open-api/internal/pkg/mysql"
+	"github.com/Ted-bug/open-api/internal/pkg/redis"
 )
 
 const (

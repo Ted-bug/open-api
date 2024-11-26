@@ -10,13 +10,13 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Ted-bug/open-api/internal/config"
+	"github.com/Ted-bug/open-api/config"
 	"github.com/Ted-bug/open-api/internal/constants"
 	"github.com/Ted-bug/open-api/internal/middleware"
+	"github.com/Ted-bug/open-api/internal/pkg/logger"
+	"github.com/Ted-bug/open-api/internal/pkg/mysql"
+	"github.com/Ted-bug/open-api/internal/pkg/redis"
 	"github.com/Ted-bug/open-api/internal/router"
-	"github.com/Ted-bug/open-api/internal/tool/logger"
-	"github.com/Ted-bug/open-api/internal/tool/mysql"
-	"github.com/Ted-bug/open-api/internal/tool/redis"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,16 +24,16 @@ func Run() {
 	// 1.启动服务
 	constants.InitPath()
 	if err := config.InitConfig(); err != nil {
-		fmt.Printf("Load Config Error: %s\n", err)
+		fmt.Printf("load config error: %s\n", err)
 		return
 	}
 	if err := mysql.InitMysql(); err != nil {
-		fmt.Printf("Run mysql error: %s\n", err)
+		fmt.Printf("run mysql error: %s\n", err)
 		return
 	}
 	defer mysql.CloseMysql()
 	if err := redis.InitRedis(); err != nil {
-		fmt.Printf("Run redis error: %s\n", err)
+		fmt.Printf("run redis error: %s\n", err)
 		return
 	}
 	defer redis.CloseRedis()
@@ -64,15 +64,15 @@ func Run() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
 	<-quit // 无信号会阻塞
-	fmt.Println("Shutdown Server ...")
+	fmt.Println("shutdown server ...")
 	// 4.3 接收到结束信号，创建5秒超时的上下文
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown: ", err)
+		log.Fatal("server shutdown: ", err)
 	}
-	fmt.Println("Server Exiting")
+	fmt.Println("server exiting")
 }
 
 // 初始化引擎
@@ -84,8 +84,8 @@ func InitEngine() *gin.Engine {
 	loc, _ := time.LoadLocation("Asia/Shanghai")
 	time.Local = loc
 
-	g.Use(middleware.LoggerMiddlerware())
 	g.Use(middleware.RecoveryMiddlerware())
+	g.Use(middleware.LoggerMiddlerware())
 	g.Use(middleware.RateLimitMiddleware(10*time.Millisecond, 3000, 2))
 
 	return g

@@ -3,7 +3,7 @@ package redis
 import (
 	"fmt"
 
-	"github.com/Ted-bug/open-api/internal/config"
+	"github.com/Ted-bug/open-api/config"
 	"github.com/go-redis/redis"
 )
 
@@ -17,7 +17,7 @@ func InitRedis() error {
 		DB:       option.Db,
 	})
 	_, err := RedisClient.Ping().Result()
-	fmt.Println("RedisClient init success")
+	fmt.Println("redisClient init success")
 	return err
 }
 

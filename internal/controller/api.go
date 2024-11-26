@@ -3,9 +3,9 @@ package controller
 import (
 	"net/http"
 
+	"github.com/Ted-bug/open-api/internal/pkg/common"
+	"github.com/Ted-bug/open-api/internal/pkg/response"
 	shorturlservice "github.com/Ted-bug/open-api/internal/service/short_url_service"
-	"github.com/Ted-bug/open-api/internal/tool/common"
-	"github.com/Ted-bug/open-api/internal/tool/response"
 	"github.com/gin-gonic/gin"
 )
 

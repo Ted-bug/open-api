@@ -1,3 +1,4 @@
 config/config.yaml
 logs/
+!logs/.gitkeep
 .vscode/

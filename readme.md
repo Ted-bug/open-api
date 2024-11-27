@@ -1,7 +1,13 @@
-# 1 技术栈
+## 1 技术栈
 以`Gin + Cobra +Viper + Gorm`搭建的web项目，包含路由、中间件、控制器、服务、model、工具等。
 
-# 2 项目结构
+## 2 特性
+- 构建docker镜像
+- Makefile工具
+- 命令行启动
+- 配置热加载
+
+## 3 项目结构
 ```txt
 |--cmd
 |--config           # 读取配置文件
@@ -23,7 +29,7 @@
 |--README.md        # 说明文档
 ```
 
-# 3 运行
+## 4 运行
 1. 编译成可执行文件
 ```golang
 go build -o open-api

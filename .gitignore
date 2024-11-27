@@ -2,3 +2,4 @@ config/config.yaml
 logs/
 !logs/.gitkeep
 .vscode/
+open-api

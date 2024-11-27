@@ -1,4 +1,4 @@
-package controller
+package url
 
 import (
 	"net/http"
@@ -33,7 +33,6 @@ func ConvertLurl(c *gin.Context) {
 			"short_url": shortUrl,
 		}))
 	}
-
 }
 
 // 解析短链

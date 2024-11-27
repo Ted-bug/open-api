@@ -4,7 +4,7 @@ USER root
 
 WORKDIR /www/wwwroot/serve_code
 COPY . .
-RUN go build -o open-api
+RUN go build -o open-api ./...
 
 WORKDIR /www/wwwroot/serve
 RUN cp /www/wwwroot/serve_code/open-api /www/wwwroot/serve/open-api

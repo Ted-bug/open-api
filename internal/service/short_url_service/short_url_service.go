@@ -1,4 +1,4 @@
-package shorturlservice
+package shorturl_service
 
 import (
 	"crypto/md5"

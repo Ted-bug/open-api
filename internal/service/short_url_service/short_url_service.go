@@ -8,7 +8,7 @@ import (
 
 	"github.com/Ted-bug/open-api/internal/model"
 	"github.com/Ted-bug/open-api/internal/pkg/common"
-	"github.com/Ted-bug/open-api/internal/pkg/mysql"
+	"github.com/Ted-bug/open-api/internal/pkg/db"
 	"github.com/Ted-bug/open-api/internal/pkg/redis"
 )
 
@@ -35,7 +35,7 @@ func IsUrlExist(Url string) (string, bool) {
 		}
 	}
 	var short model.ShortUrl
-	if err := mysql.DB.Where("hash=?", urlMd5).Find(&short).Error; err == nil {
+	if err := db.DB.Where("hash=?", urlMd5).Find(&short).Error; err == nil {
 		redis.RedisClient.Set(key, short.Surl, common.RandMinute(5)).Result()
 		return short.Surl, true
 	}
@@ -54,7 +54,7 @@ func ConvertLurl(Url string) (string, error) {
 	short.CreateTime = time.Now().Format("2006-01-02 15:04:05")
 	short.Surl = generateNumber()
 	short.Status = 1
-	if err := mysql.DB.Create(&short).Error; err != nil {
+	if err := db.DB.Create(&short).Error; err != nil {
 		return "", err
 	}
 	// 加入缓存
@@ -82,10 +82,10 @@ func UniqueNum() int64 {
 	var err error
 	shortNum := model.UniqueNum{Type: "short"}
 	// 数据库设置主键自增、唯一索引：触发replace删除后插入的操作，达到唯一ID的效果
-	tx := mysql.DB.Begin() // 事务，保证并发时，生成的ID不会重复
+	tx := db.DB.Begin() // 事务，保证并发时，生成的ID不会重复
 	stmt := "replace into " + shortNum.TableName() + " (type) values (?)"
 	if err = tx.Exec(stmt, shortNum.Type).Error; err == nil {
-		if err = mysql.DB.Where("type=?", shortNum.Type).Last(&shortNum).Error; err == nil {
+		if err = db.DB.Where("type=?", shortNum.Type).Last(&shortNum).Error; err == nil {
 			if err = tx.Commit().Error; err == nil {
 				return shortNum.Id
 			}
@@ -105,7 +105,7 @@ func RevertSurl(s string) (string, bool) {
 		return v, true
 	}
 	var short model.ShortUrl
-	if err := mysql.DB.Where("surl=?", s).Find(&short).Error; err == nil {
+	if err := db.DB.Where("surl=?", s).Find(&short).Error; err == nil {
 		redis.RedisClient.Set(LONG_KEY+s, short.Lurl, common.RandMinute(15)).Result()
 		return short.Lurl, true
 	}

@@ -13,8 +13,8 @@ import (
 	"github.com/Ted-bug/open-api/config"
 	"github.com/Ted-bug/open-api/internal/constants"
 	"github.com/Ted-bug/open-api/internal/middleware"
+	"github.com/Ted-bug/open-api/internal/pkg/db"
 	"github.com/Ted-bug/open-api/internal/pkg/logger"
-	"github.com/Ted-bug/open-api/internal/pkg/mysql"
 	"github.com/Ted-bug/open-api/internal/pkg/redis"
 	"github.com/Ted-bug/open-api/internal/router"
 	"github.com/gin-gonic/gin"
@@ -27,11 +27,11 @@ func Run() {
 		fmt.Printf("load config error: %s\n", err)
 		return
 	}
-	if err := mysql.InitMysql(); err != nil {
+	if err := db.InitDB(); err != nil {
 		fmt.Printf("run mysql error: %s\n", err)
 		return
 	}
-	defer mysql.CloseMysql()
+	defer db.CloseDB()
 	if err := redis.InitRedis(); err != nil {
 		fmt.Printf("run redis error: %s\n", err)
 		return

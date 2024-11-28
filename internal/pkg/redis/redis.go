@@ -17,8 +17,11 @@ func InitRedis() error {
 		DB:       option.Db,
 	})
 	_, err := RedisClient.Ping().Result()
+	if err != nil {
+		return err
+	}
 	fmt.Println("redisClient init success")
-	return err
+	return nil
 }
 
 // 获取redis的配置信息；

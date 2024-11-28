@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/Ted-bug/open-api/internal/model"
-	"github.com/Ted-bug/open-api/internal/pkg/mysql"
+	"github.com/Ted-bug/open-api/internal/pkg/db"
 	"github.com/spf13/cobra"
 )
 
@@ -21,11 +21,11 @@ func migrateCmdExcutefunc(cmd *cobra.Command, args []string) {
 		fmt.Println("there is not a config/config.yaml in this dir")
 		return
 	} else {
-		if err := mysql.InitMysql(); err != nil {
+		if err := db.InitMysql(); err != nil {
 			fmt.Println(err)
 			return
 		}
-		mysql.DB.AutoMigrate(&model.AkSk{}, &model.ShortUrl{}, &model.UniqueNum{})
-		fmt.Println("Done!")
+		db.DB.AutoMigrate(&model.AkSk{}, &model.ShortUrl{}, &model.UniqueNum{})
+		fmt.Println("done!")
 	}
 }

@@ -14,7 +14,7 @@ func initApiRouter(group *gin.RouterGroup) {
 				"message": "hello world",
 			})
 		})
-		api.Use(middleware.AkSkCheckMiddleware()).POST("/convert-lurl", url.ConvertLurl)
+		api.POST("/convert-lurl", middleware.AkSkCheckMiddleware(), url.ConvertLurl)
 		api.GET("/surl", url.RevertSurl)
 	}
 }

@@ -30,7 +30,11 @@ func InitPath() {
 	LOGPATH = PROJECTPATH + LOGPATH
 }
 
-// 获取项目根路径
+// 获取项目根路径：exec为执行文件所在的路径；runPath为依据此段代码所在文件的相对路径推算出的项目根路径。
+//
+// 1.go build：execPath = 项目根路径；runPath会依据步骤2变为execPath的父父...目录；
+//
+// 2.go run: execPath = 临时目录；runPath = 项目路径
 func GetProjectPath() string {
 	// 1.获取exe的生成路径
 	execPath, err := os.Executable()
@@ -43,18 +47,31 @@ func GetProjectPath() string {
 	var runPath string
 	_, filename, _, ok := runtime.Caller(0)
 	if ok {
-		runPath = path.Dir(path.Dir(path.Dir(filename))) // !!需要根据此函数的go文件所处的项目相对位置调节Dir层数
+		// !!需要根据此函数的go文件所处的项目相对位置调节Dir层数
+		runPath = path.Dir(path.Dir(path.Dir(filename)))
 	}
 
-	// 3.获取Temp路径（好像linux没有，win有，故而判断该用哪个路径）
-	tempPath := os.Getenv("TEMP")
-	if tempPath == "" {
-		tempPath = os.Getenv("TMP")
+	// 3.获取Temp路径
+	goos := os.Getenv("GOOS")
+	tmpPaths := map[string][]string{
+		"windows": {"GOTMPDIR", "TEMP", "TMP"},
+		"linux":   {"GOTMPDIR", "/tmp"},
 	}
-	tempPath, _ = filepath.EvalSymlinks(tempPath)
+	tmpPath := ""
+	for _, v := range tmpPaths[goos] {
+		if v[0] == '/' {
+			tmpPath = v
+			break
+		}
+		tmpPath = os.Getenv(v)
+		if tmpPath != "" {
+			break
+		}
+	}
+	tmpPath, _ = filepath.EvalSymlinks(tmpPath)
 
 	// 4.识别最终路径
-	if strings.Contains(execPath, tempPath) {
+	if strings.Contains(execPath, tmpPath) {
 		return runPath
 	}
 	return execPath

@@ -1,11 +1,13 @@
 ## 1 技术栈
-以`Gin + Cobra +Viper + Gorm`搭建的web项目，包含路由、中间件、控制器、服务、model、工具等。
+以`Gin + Cobra + Viper + Gorm`搭建的api项目，包含路由、中间件、控制器、服务、model、工具等。
 
 ## 2 特性
-- 构建docker镜像
 - Makefile工具
+- 构建docker镜像
 - 命令行启动
-- 配置热加载
+- 配置热加载（资源类配置不适用）
+- 数据迁移
+- zap日志
 
 ## 3 项目结构
 ```txt
@@ -32,13 +34,14 @@
 ## 4 运行
 1. 编译成可执行文件
 ```golang
-go build -o open-api
+go build -o openapi ./main.go
+// or make build
 ```
 2. 数据库初始化
 ```
-open-api migrate
+openapi migrate
 ```
 3. 运行
 ```
-open-api run
+openapi run
 ```

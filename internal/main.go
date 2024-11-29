@@ -84,7 +84,7 @@ func InitEngine() *gin.Engine {
 	loc, _ := time.LoadLocation("Asia/Shanghai")
 	time.Local = loc
 
-	// g.Use(middleware.RecoveryMiddlerware())
+	g.Use(middleware.RecoveryMiddlerware())
 	g.Use(middleware.LoggerMiddlerware())
 	g.Use(middleware.RateLimitMiddleware(10*time.Millisecond, 3000, 2))
 

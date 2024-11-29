@@ -34,8 +34,8 @@ func IsUrlExist(Url string) (string, bool) {
 			return v, true
 		}
 	}
-	var short model.ShortUrl
-	if err := db.DB.Where("hash=?", urlMd5).Find(&short).Error; err == nil {
+	short := model.ShortUrl{}
+	if err := db.DB.Where("hash=?", urlMd5).First(&short).Error; err == nil {
 		redis.RedisClient.Set(key, short.Surl, common.RandMinute(5)).Result()
 		return short.Surl, true
 	}
@@ -48,7 +48,7 @@ func ConvertLurl(Url string) (string, error) {
 	if _, err := hasher.Write([]byte(Url)); err != nil {
 		return "", err
 	}
-	var short model.ShortUrl
+	short := model.ShortUrl{}
 	short.Lurl = Url
 	short.Hash = hex.EncodeToString(hasher.Sum(nil))
 	short.CreateTime = time.Now().Format("2006-01-02 15:04:05")
@@ -104,8 +104,8 @@ func RevertSurl(s string) (string, bool) {
 	if v, err := redis.RedisClient.Get(LONG_KEY + s).Result(); err == nil {
 		return v, true
 	}
-	var short model.ShortUrl
-	if err := db.DB.Where("surl=?", s).Find(&short).Error; err == nil {
+	short := model.ShortUrl{}
+	if err := db.DB.Where("surl=?", s).First(&short).Error; err == nil {
 		redis.RedisClient.Set(LONG_KEY+s, short.Lurl, common.RandMinute(15)).Result()
 		return short.Lurl, true
 	}

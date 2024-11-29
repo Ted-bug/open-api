@@ -15,19 +15,28 @@ type Config struct {
 	Mode   string `mapstructure:"mode"`
 	Host   string `mapstructure:"host"`
 	Port   string `mapstructure:"port"`
+	Gorm   Gorm   `mapstructure:"gorm"`
 	Mysql  Mysql  `mapstructure:"mysql"`
 	Redis  Redis  `mapstructure:"redis"`
 	Logger Logger `mapstructure:"logger"`
 }
 
+type Gorm struct {
+	LogLevel int `mapstructure:"log_level"`
+}
+
 type Mysql struct {
-	Host     string `mapstructure:"host"`
-	Port     string `mapstructure:"port"`
-	User     string `mapstructure:"user"`
-	Password string `mapstructure:"password"`
-	DbName   string `mapstructure:"db_name"`
-	Charset  string `mapstructure:"charset"`
-	Prefix   string `mapstructure:"prefix"`
+	Host            string `mapstructure:"host"`
+	Port            string `mapstructure:"port"`
+	User            string `mapstructure:"user"`
+	Password        string `mapstructure:"password"`
+	DbName          string `mapstructure:"db_name"`
+	Charset         string `mapstructure:"charset"`
+	Prefix          string `mapstructure:"prefix"`
+	MaxOpenConns    int    `mapstructure:"max_open_conns"`
+	ConnMaxLifetime int    `mapstructure:"conn_max_lifetime"`
+	MaxIdleConns    int    `mapstructure:"max_idle_conns"`
+	ConnMaxIdleTime int    `mapstructure:"conn_max_idle_time"`
 }
 
 type Redis struct {

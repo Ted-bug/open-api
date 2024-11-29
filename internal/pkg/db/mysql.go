@@ -3,6 +3,7 @@ package db
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/Ted-bug/open-api/config"
 	"gorm.io/driver/mysql"
@@ -19,12 +20,26 @@ func InitMysql() error {
 	if dsn == "" {
 		return errors.New("db's dns is empty")
 	}
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+	DB, err = gorm.Open(mysql.New(
+		mysql.Config{
+			DSN:               dsn,
+			DefaultStringSize: 256,
+		}),
+		&gorm.Config{
+			Logger: logger.Default.LogMode(logger.LogLevel(config.AppConfig.Gorm.LogLevel)),
+		})
 	if err != nil {
 		return err
 	}
+	if sqlDB, err := DB.DB(); err == nil {
+		sqlDB.SetConnMaxIdleTime(time.Second * time.Duration(config.AppConfig.Mysql.ConnMaxIdleTime))
+		sqlDB.SetConnMaxLifetime(time.Second * time.Duration(config.AppConfig.Mysql.ConnMaxLifetime))
+		sqlDB.SetMaxIdleConns(config.AppConfig.Mysql.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(config.AppConfig.Mysql.MaxOpenConns)
+	} else {
+		fmt.Println("mysql init connect's config failed")
+	}
+
 	fmt.Println("mysql init success")
 	return nil
 }

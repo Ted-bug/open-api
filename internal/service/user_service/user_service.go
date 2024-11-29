@@ -24,7 +24,7 @@ import (
 func GetUserSkByAk(ak string) (string, error) {
 	// 通过MySQL数据库查询指定Access Key是否存在
 	var aksk model.AkSk
-	if err := db.DB.Where("ak=?", ak).Where("status=?", 1).Find(&aksk).Error; err != nil || gorm.IsRecordNotFoundError(err) {
+	if err := db.DB.Where("ak=?", ak).Where("status=?", 1).First(&aksk).Error; err != nil || gorm.IsRecordNotFoundError(err) {
 		return "", errors.New("查询出错")
 	}
 	return aksk.Sk, nil // 无错误发生，表示Access Key存在

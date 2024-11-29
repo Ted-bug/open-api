@@ -27,7 +27,7 @@ func Run() {
 		fmt.Printf("load config error: %s\n", err)
 		return
 	}
-	if err := db.InitDB(); err != nil {
+	if err := db.InitDB(db.TYPE_MYSQL); err != nil {
 		fmt.Printf("run mysql error: %s\n", err)
 		return
 	}
@@ -84,7 +84,7 @@ func InitEngine() *gin.Engine {
 	loc, _ := time.LoadLocation("Asia/Shanghai")
 	time.Local = loc
 
-	g.Use(middleware.RecoveryMiddlerware())
+	// g.Use(middleware.RecoveryMiddlerware())
 	g.Use(middleware.LoggerMiddlerware())
 	g.Use(middleware.RateLimitMiddleware(10*time.Millisecond, 3000, 2))
 

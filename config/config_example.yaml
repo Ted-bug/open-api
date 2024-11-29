@@ -1,6 +1,8 @@
 mode: debug
 host: 127.0.0.1
 port: 8080
+gorm:
+  log_level: 1 # 1 Slite, 2 Error 3 Warn 4 Info
 mysql:
   host: 127.0.0.1
   port: 3306
@@ -9,6 +11,10 @@ mysql:
   db_name: openapi
   charset: utf8mb4
   prefix: open_
+  max_open_conns: 10    # 最大打开连接数
+  conn_max_lifetime: 60 # 打开连接最长存活时间，秒
+  max_idle_conns: 5     # 最大空闲连接数
+  conn_max_idle_time: 5 # 空闲连接最长空闲时间，秒
 redis:
   host: 127.0.0.1
   port: 6379

@@ -52,13 +52,12 @@ func GetProjectPath() string {
 	}
 
 	// 3.获取Temp路径
-	goos := os.Getenv("GOOS")
 	tmpPaths := map[string][]string{
 		"windows": {"GOTMPDIR", "TEMP", "TMP"},
 		"linux":   {"GOTMPDIR", "/tmp"},
 	}
 	tmpPath := ""
-	for _, v := range tmpPaths[goos] {
+	for _, v := range tmpPaths[runtime.GOOS] {
 		if v[0] == '/' {
 			tmpPath = v
 			break

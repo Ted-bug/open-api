@@ -15,7 +15,7 @@ var (
 
 func InitDB(dbUse ...string) (err error) {
 	if len(dbUse) <= 0 {
-		return
+		return errors.New("there is not db to use")
 	}
 	dbUseList = dbUse
 	var tmpErr error

@@ -12,20 +12,52 @@ import (
 )
 
 // 记得使用Logger.Sync()刷新缓冲区
-var Logger *zap.Logger
+var logMap map[string]*zap.Logger
+
+var (
+	TYPE_RUN   = "run"
+	TYPE_PANIC = "panic"
+)
 
 func InitLogger() {
 	option := config.AppConfig.Logger
-	switch option.Type {
-	case "file":
-		// Logger = CreateSyncLogger()
-		Logger = CreateAsyncLogger(option) // 配置了日志切割写入器的Logger
-	case "command":
-		fallthrough
-	default:
-		Logger, _ = zap.NewProduction(zap.AddCaller()) // 打印到命令行stdout的Logger
+	for _, lname := range option.List {
+		switch option.Type {
+		case "file":
+			// Logger = CreateSyncLogger()
+			option.Filename = lname + ".log"
+			// 配置了日志切割写入器的Logger
+			logMap[lname] = CreateAsyncLogger(option)
+		case "command":
+			fallthrough
+		default:
+			// 打印到命令行stdout的Logger
+			if tmpLog, err := zap.NewProduction(zap.AddCaller()); err != nil {
+				fmt.Println("a logger failed: ", lname, err)
+			} else {
+				logMap[lname] = tmpLog
+			}
+		}
 	}
 	fmt.Println("logger init success")
+}
+
+// Close 保证刷写所有日志到磁盘中
+// zap日志没有提供关闭句柄的方法
+func Close() {
+	for _, l := range logMap {
+		if l != nil {
+			l.Sync()
+		}
+	}
+}
+
+// GetLogger 根据名称获取Logger实例
+func GetLogger(lname string) *zap.Logger {
+	if l, ok := logMap[lname]; ok && l != nil {
+		return l
+	}
+	return nil
 }
 
 // CreateSyncLogger 创建一个同步写日志的Logger实例。

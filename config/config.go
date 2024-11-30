@@ -48,12 +48,13 @@ type Redis struct {
 }
 
 type Logger struct {
-	Type       string `mapstructure:"type"`
-	Path       string `mapstructure:"path"`
-	Filename   string `mapstructure:"filename"`
-	MaxSize    int    `mapstructure:"max_size"`
-	MaxAge     int    `mapstructure:"max_age"`
-	MaxBackups int    `mapstructure:"max_backups"`
+	List       []string `mapstructure:"list"`
+	Type       string   `mapstructure:"type"`
+	Path       string   `mapstructure:"path"`
+	Filename   string   `mapstructure:"filename"`
+	MaxSize    int      `mapstructure:"max_size"`
+	MaxAge     int      `mapstructure:"max_age"`
+	MaxBackups int      `mapstructure:"max_backups"`
 }
 
 var AppConfig = &Config{}

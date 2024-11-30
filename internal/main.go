@@ -38,6 +38,7 @@ func Run() {
 	}
 	defer redis.CloseRedis()
 	logger.InitLogger()
+	defer logger.Close()
 
 	// 2.获取引擎，配置路由
 	g := InitEngine()

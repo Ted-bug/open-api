@@ -12,7 +12,7 @@ import (
 )
 
 func LoggerMiddlerware() gin.HandlerFunc {
-	return ginzap.GinzapWithConfig(logger.Logger, &ginzap.Config{
+	return ginzap.GinzapWithConfig(logger.GetLogger(logger.TYPE_RUN), &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        true,
 		Context: func(c *gin.Context) []zapcore.Field {
@@ -20,9 +20,9 @@ func LoggerMiddlerware() gin.HandlerFunc {
 			traceId := c.Request.Header.Get("X-Trace-Id")
 			if traceId == "" {
 				traceId = uuid.NewV4().String()
-				c.Request.Header.Set("traceId", traceId)
+				c.Request.Header.Set("X-Trace-Id", traceId)
 			}
-			fields = append(fields, zap.String("traceID", traceId))
+			fields = append(fields, zap.String("traceId", traceId))
 			return fields
 		},
 	})

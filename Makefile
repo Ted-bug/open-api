@@ -2,7 +2,7 @@ SCRIPT=go
 BINARY=open-api
 GOOS=linux
 GOARCH=amd64
-DATE=$(shell date +%Y%m%d)
+DATE=$(shell date +%Y%m%d%H%M%S)
 VERSION=$(shell git describe --tags --always --dirty)
 BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 
@@ -29,7 +29,7 @@ build:
 .PHONY: run
 # 直接运行 Go 代码
 run:
-	$(SCRIPT) run ./... run
+	$(SCRIPT) run ./main.go run
 
 .PHONY: clean
 # 移除二进制文件和 vim swap files

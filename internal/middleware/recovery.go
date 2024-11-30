@@ -7,5 +7,5 @@ import (
 )
 
 func RecoveryMiddlerware() gin.HandlerFunc {
-	return ginzap.RecoveryWithZap(logger.Logger, true)
+	return ginzap.RecoveryWithZap(logger.GetLogger(logger.TYPE_PANIC), true)
 }

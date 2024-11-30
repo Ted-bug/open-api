@@ -31,5 +31,6 @@ func GetRedisConf() config.Redis {
 }
 
 func CloseRedis() {
+	fmt.Println("close redis...")
 	RedisClient.Close()
 }

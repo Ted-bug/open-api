@@ -32,6 +32,7 @@ func InitDB(dbUse ...string) (err error) {
 }
 
 func CloseDB() {
+	fmt.Println("close db...")
 	for _, t := range dbUseList {
 		switch t {
 		case TYPE_MYSQL:

@@ -20,6 +20,9 @@ var (
 )
 
 func InitLogger() {
+	if logMap == nil {
+		logMap = make(map[string]*zap.Logger, 2)
+	}
 	option := config.AppConfig.Logger
 	for _, lname := range option.List {
 		switch option.Type {
@@ -45,6 +48,7 @@ func InitLogger() {
 // Close 保证刷写所有日志到磁盘中
 // zap日志没有提供关闭句柄的方法
 func Close() {
+	fmt.Println("close logger...")
 	for _, l := range logMap {
 		if l != nil {
 			l.Sync()

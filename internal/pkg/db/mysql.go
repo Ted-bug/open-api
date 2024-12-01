@@ -11,6 +11,13 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+var levelMap = map[string]logger.LogLevel{
+	"silent": logger.Silent,
+	"info":   logger.Info,
+	"warn":   logger.Warn,
+	"error":  logger.Error,
+}
+
 func InitMysql() error {
 	var (
 		err error
@@ -26,7 +33,7 @@ func InitMysql() error {
 			DefaultStringSize: 256,
 		}),
 		&gorm.Config{
-			Logger: logger.Default.LogMode(logger.LogLevel(config.AppConfig.Gorm.LogLevel)),
+			Logger: logger.Default.LogMode(logger.LogLevel(levelMap[config.AppConfig.Gorm.LogLevel])),
 		})
 	if err != nil {
 		return err

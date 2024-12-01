@@ -22,7 +22,7 @@ type Config struct {
 }
 
 type Gorm struct {
-	LogLevel int `mapstructure:"log_level"`
+	LogLevel string `mapstructure:"log_level"`
 }
 
 type Mysql struct {

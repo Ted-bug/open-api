@@ -2,7 +2,7 @@ mode: debug
 host: 127.0.0.1
 port: 8080
 gorm:
-  log_level: 1 # 1 Slite, 2 Error 3 Warn 4 Info
+  log_level: slite # Slite, Error, Warn, Info
 mysql:
   host: 127.0.0.1
   port: 3306

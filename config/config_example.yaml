@@ -22,10 +22,12 @@ redis:
   db: 0
   prefix: open_
 logger:
+  package: zap
   list: # 需要初始化的日志句柄
     - run   # 运行日志
     - panic # panic日志
-  type: file
+  level: info
+  output: file
   path: /logs/
   max_size: 20
   max_age: 30

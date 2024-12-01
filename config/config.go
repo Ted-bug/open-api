@@ -48,8 +48,10 @@ type Redis struct {
 }
 
 type Logger struct {
+	Package    string   `mapstructure:"package"`
 	List       []string `mapstructure:"list"`
-	Type       string   `mapstructure:"type"`
+	Level      string   `mapstructure:"level"`
+	Output     string   `mapstructure:"output"`
 	Path       string   `mapstructure:"path"`
 	Filename   string   `mapstructure:"filename"`
 	MaxSize    int      `mapstructure:"max_size"`

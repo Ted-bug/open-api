@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Ted-bug/open-api/internal/pkg/logger"
+	"github.com/Ted-bug/open-api/internal/pkg/logger/zaplog"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -12,7 +13,7 @@ import (
 )
 
 func LoggerMiddlerware() gin.HandlerFunc {
-	return ginzap.GinzapWithConfig(logger.GetLogger(logger.TYPE_RUN), &ginzap.Config{
+	return ginzap.GinzapWithConfig(logger.GetZapLogger(zaplog.LogRun), &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        true,
 		Context: func(c *gin.Context) []zapcore.Field {
